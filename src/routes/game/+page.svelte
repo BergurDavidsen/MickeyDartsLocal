@@ -10,6 +10,7 @@
 	let player;
 	let numbers;
 	let tableNumbers;
+	let winners = [];
 
 	onMount(() => {
 		let playerNames = $page.url.searchParams.get('names');
@@ -66,6 +67,7 @@
 		}
 		if (players[player][key] >= 3) {
 			players[player][key] = finished;
+			checkWinner();
 		}
 		if (clickCounter == 3) {
 			passTurn();
@@ -93,6 +95,17 @@
 			roundCounter += 1;
 		}
 	}
+	function checkWinner() {
+		for (let key of numbers.slice(1)) {
+			if (players[player][key] != finished) {
+				return;
+			}
+		}
+		console.log(`${player} is done`);
+		if (!winners.includes(player)) {
+			winners.push(player);
+		}
+	}
 </script>
 
 {#if tableNumbers}
@@ -101,7 +114,9 @@
 			<tr>
 				<th class="border border-black">Targets</th>
 				{#each Object.keys(players) as players}
-					<th class="border border-black">{players} </th>
+					<th class="border border-black"
+						>{winners.includes(players) ? players + ' is done!' : players}
+					</th>
 				{/each}
 			</tr>
 			{#each tableNumbers as number}
