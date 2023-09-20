@@ -25,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"ably": "^1.2.43"
+		"ably": "^1.2.43",
+		"uuidv4": "^6.2.13"
 	}
 }

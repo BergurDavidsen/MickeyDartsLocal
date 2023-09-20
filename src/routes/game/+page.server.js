@@ -1,6 +1,11 @@
-export async function load({ cookies, url}) {
+import { redirect } from "@sveltejs/kit";
 
-    return {};
+export async function load({ cookies, url}) {
+    if(!cookies.get("sessionID")){
+        throw redirect(303, "/");
+    }
+    const sessionID = cookies.get("sessionID");
+    return {sessionID};
 };
 
 export const actions = {

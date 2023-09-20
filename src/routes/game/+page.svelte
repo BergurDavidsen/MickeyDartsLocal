@@ -1,9 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	export let data;
+
+	// console.log(data.sessionID);
+
+	const sessioId = data.sessionID;
 
 	let turnIndex = 0;
-	let clickCounter = 0;
 	const finished = 'Done!';
 	let roundCounter = 1;
 	let players = {};
@@ -11,6 +15,8 @@
 	let numbers;
 	let tableNumbers;
 	let winners = [];
+	const url =
+		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
 
 	onMount(() => {
 		let playerNames = $page.url.searchParams.get('names');
@@ -54,23 +60,45 @@
 		}).reverse();
 		numbers = Object.keys(players[player]).reverse();
 	});
+	async function postDataToDatabase(data) {
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: data
+			});
 
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			console.log('data sent');
+			return response.json();
+		} catch (error) {
+			console.error('Error sending data:', error);
+			throw error; // Re-throw the error to propagate it further if needed
+		}
+	}
 	function handleClick(key) {
 		if (players[player][key] == finished) return;
 
 		if (players[player][key] < 3) {
 			players[player][key] += 1;
 			players[player]['score'] += 1;
+			let dataMessage = JSON.stringify({
+				gameID: sessioId,
+				player: player.toUpperCase(),
+				hit: key,
+				currentScore: players[player]['score']
+			});
+			postDataToDatabase(dataMessage);
 		}
-		if (!(players[player]['Double'] == finished || players[player]['Triple'] == finished)) {
-			clickCounter += 1;
-		}
+
 		if (players[player][key] >= 3) {
 			players[player][key] = finished;
 			checkWinner();
-		}
-		if (clickCounter == 3) {
-			passTurn();
 		}
 	}
 	function undo(key) {
@@ -90,7 +118,7 @@
 	function passTurn() {
 		turnIndex = (turnIndex + 1) % Object.keys(players).length;
 		player = Object.keys(players)[turnIndex];
-		clickCounter = 0;
+
 		if (turnIndex == 0) {
 			roundCounter += 1;
 		}
