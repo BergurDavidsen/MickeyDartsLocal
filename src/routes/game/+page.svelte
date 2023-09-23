@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+
 	export let data;
 
 	// console.log(data.sessionID);
@@ -15,6 +17,7 @@
 	let numbers;
 	let tableNumbers;
 	let winners = [];
+	let wantsToRestart = false;
 	const url =
 		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
 
@@ -22,24 +25,41 @@
 		let playerNames = $page.url.searchParams.get('names');
 		playerNames = playerNames.split(',');
 
-		for (let i = 0; i < playerNames.length; i++) {
-			playerNames[i] = playerNames[i].trim();
+		if (browser) {
+			const localStorageState = window.localStorage.getItem('state');
+			const localStorageRound = window.localStorage.getItem('currentRound');
+			const localStorageTurn = window.localStorage.getItem('turnIndex');
 
-			players[playerNames[i]] = {
-				'20': 0,
-				'19': 0,
-				'18': 0,
-				'17': 0,
-				'16': 0,
-				'15': 0,
-				'14': 0,
-				'13': 0,
-				'12': 0,
-				Double: 0,
-				Triple: 0,
-				Bull: 0,
-				score: 0
-			};
+			if (localStorageState) {
+				players = JSON.parse(localStorageState);
+
+				if (localStorageRound) {
+					roundCounter = JSON.parse(localStorageRound);
+				}
+				if (localStorageTurn) {
+					turnIndex = JSON.parse(localStorageTurn);
+				}
+			} else {
+				for (let i = 0; i < playerNames.length; i++) {
+					playerNames[i] = playerNames[i].trim();
+
+					players[playerNames[i]] = {
+						'20': 0,
+						'19': 0,
+						'18': 0,
+						'17': 0,
+						'16': 0,
+						'15': 0,
+						'14': 0,
+						'13': 0,
+						'12': 0,
+						Double: 0,
+						Triple: 0,
+						Bull: 0,
+						score: 0
+					};
+				}
+			}
 		}
 		player = Object.keys(players)[turnIndex];
 
@@ -100,27 +120,36 @@
 			players[player][key] = finished;
 			checkWinner();
 		}
+		if (browser) {
+			window.localStorage.setItem('state', JSON.stringify(players));
+		}
 	}
 	function undo(key) {
 		if (players[player][key] == 0) return;
 
 		if (players[player][key] < 3) {
 			players[player][key] -= 1;
+			players[player]['score'] -= 1;
+			window.localStorage.setItem('state', JSON.stringify(players));
 		}
 		if (players[player][key] == finished) {
 			players[player][key] = 2;
-		}
-
-		if (clickCounter > 0) {
-			clickCounter -= 1;
+			players[player]['score'] -= 1;
+			window.localStorage.setItem('state', JSON.stringify(players));
 		}
 	}
 	function passTurn() {
 		turnIndex = (turnIndex + 1) % Object.keys(players).length;
 		player = Object.keys(players)[turnIndex];
+		if (browser) {
+			window.localStorage.setItem('turnIndex', JSON.stringify(turnIndex));
+		}
 
 		if (turnIndex == 0) {
 			roundCounter += 1;
+			if (browser) {
+				window.localStorage.setItem('currentRound', JSON.stringify(roundCounter));
+			}
 		}
 	}
 	function checkWinner() {
@@ -134,11 +163,17 @@
 			winners.push(player);
 		}
 	}
+	function restartGame() {
+		if (browser) {
+			window.localStorage.clear();
+			window.location.reload();
+		}
+	}
 </script>
 
 {#if tableNumbers}
 	<div class="mx-2 flex flex-col justify-center items-center">
-		<table class="bg-white">
+		<table class="bg-white mt-2">
 			<tr>
 				<th class="border border-black">Targets</th>
 				{#each Object.keys(players) as players}
@@ -193,6 +228,20 @@
 		{/each}
 	</div>
 {/if}
+<div class="flex flex-col justify-center items-center">
+	<button
+		on:click={() => (wantsToRestart = !wantsToRestart)}
+		class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+		>{wantsToRestart ? 'Cancel' : 'Restart?'}
+	</button>
+	{#if wantsToRestart}
+		<button
+			on:click={() => restartGame()}
+			class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+			>Confirm</button
+		>
+	{/if}
+</div>
 <!-- class=" mb-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800" -->
 <!-- class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" -->
 <!-- class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" -->

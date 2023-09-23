@@ -1,8 +1,10 @@
 import { redirect } from "@sveltejs/kit";
+import {uuid} from "uuidv4";
+
 
 export async function load({ cookies, url}) {
     if(!cookies.get("sessionID")){
-        throw redirect(303, "/");
+        cookies.set("sessionID", uuid(), {path:"/", maxAge:60*60*2, httpOnly: false});
     }
     const sessionID = cookies.get("sessionID");
     return {sessionID};
