@@ -8,9 +8,6 @@
 	let playerName = '';
 	let creatingRoom = false;
 
-	onDestroy(() => {
-		creatingRoom = false;
-	});
 	function handleCreate() {
 		creatingRoom = true;
 		if (browser) {
