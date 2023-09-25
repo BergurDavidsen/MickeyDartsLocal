@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bubbly_constant {
+  id             Int     @id @default(autoincrement())
+  eventid        String? @db.VarChar(255)
+  message        String? @db.VarChar(255)
+  uppercasecount Int?
+  validtime      String? @db.VarChar(255)
+}
+
+model enchanted_blackberry {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  message   String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model enlightened_wraparound {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  message   String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model flimsy_pressroom {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  message   String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model mickey_dummy_data {
+  id           Int     @id @default(autoincrement())
+  currentscore String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  message      String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_dummy_test_data {
+  id           Int     @id @default(autoincrement())
+  currentscore String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  message      String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_test_data {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  message   String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model nutty_mission {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  message   String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model detailed_lemon {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  latitude  String? @db.VarChar(255)
+  longitude String? @db.VarChar(255)
+  record    String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model mickey_dummy_data_rounds {
+  id           Int     @id @default(autoincrement())
+  currentround String? @db.VarChar(255)
+  currentscore String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  hits         String? @db.VarChar(255)
+  message      String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}

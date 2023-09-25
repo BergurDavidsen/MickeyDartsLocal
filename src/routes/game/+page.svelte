@@ -18,6 +18,7 @@
 	let tableNumbers;
 	let winners = [];
 	let wantsToRestart = false;
+
 	const url =
 		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
 
@@ -111,7 +112,7 @@
 				gameID: sessioId,
 				player: player.toUpperCase(),
 				hit: key,
-				currentScore: players[player]['score']
+				currentRound: roundCounter
 			});
 			postDataToDatabase(dataMessage);
 		}
@@ -124,6 +125,7 @@
 			window.localStorage.setItem('state', JSON.stringify(players));
 		}
 	}
+
 	function undo(key) {
 		if (players[player][key] == 0) return;
 
