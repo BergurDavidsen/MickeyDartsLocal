@@ -6,7 +6,7 @@
 	let hitPerRound = {};
 	/** @type {import('./$types').PageData} */
 	export let data;
-	const hits = data.players;
+	let hits = data.players;
 	let datasets = [];
 
 	let labels = [];
@@ -17,7 +17,20 @@
 		const b = Math.floor(Math.random() * 256); // Random value between 0 and 255 for blue
 		return `rgb(${r}, ${g}, ${b}, 0.4)`; // Return the RGB color as a string
 	}
+	function sortObjectKeysByRoundNumber(obj) {
+		// Get the keys of the object
+		const keys = Object.keys(obj);
 
+		// Sort the keys based on the round number
+		keys.sort((a, b) => {
+			const roundA = parseInt(a.split(' ')[0]);
+			const roundB = parseInt(b.split(' ')[0]);
+			return roundA - roundB;
+		});
+
+		// Return the sorted keys
+		return keys;
+	}
 	// onMount(() => {
 	// 	setInterval(() => {
 	// 		window.location.reload();
@@ -69,8 +82,8 @@
 			}
 		]
 	};
-
-	for (let key of Object.keys(hitPerRound)) {
+	const keys = sortObjectKeysByRoundNumber(hitPerRound);
+	for (let key of keys) {
 		const label = key.split(' ')[1]; // Extract the label from the key
 
 		if (!datasets[label]) {

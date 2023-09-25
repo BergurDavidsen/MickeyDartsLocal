@@ -5,7 +5,12 @@ export async function load() {
 
 const hitPerRound = {};
 
-const players = db.mickey_dummy_data_rounds.findMany();
+const players = db.mickey_dummy_data_rounds.findMany({
+    orderBy:{
+        currentround:"asc"
+    }
+
+});
 
 return {players}
 
