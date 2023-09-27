@@ -64,6 +64,7 @@
 	function handleJoin() {
 		joiningRoom = true;
 		creatingRoom = false;
+		window.localStorage.clear();
 	}
 </script>
 
