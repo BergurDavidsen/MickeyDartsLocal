@@ -79,7 +79,9 @@
 	<p class="mt-3">
 		The rules are the same as always, but instead of using only one screen in pass and play mode,
 		you can now play the same game on multiple devices. The only thing you have to do is create a
-		room, and then share the pin with your friends, so they can join the fun 😊
+		room, and then share the pin with your friends, so they can join the fun 😊 <i
+			>(You play by the order of which you join the room)</i
+		>
 	</p>
 	{#if form?.error}
 		<p class="text-red-500 mt-3">{form.message}!</p>

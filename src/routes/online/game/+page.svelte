@@ -24,8 +24,10 @@
 	let isStarted = true;
 	let statsForAllRounds = {};
 	let hitsForRound = [];
-	let currentPlayer;
+	let currentPlayer = null;
 	let startCounter = 0;
+	let order = [];
+	let gone = [];
 
 	let hits = {
 		Double: 0,
@@ -45,6 +47,8 @@
 		let localHits = window.localStorage.getItem('hits');
 		let localPlayer = window.localStorage.getItem('currentPlayer');
 		let localStorageRound = window.localStorage.getItem('roundCounter');
+		let localOrder = window.localStorage.getItem('playerOrder');
+		let localGone = window.localStorage.getItem('playersGone');
 
 		if (localHits) {
 			hits = JSON.parse(localHits);
@@ -57,6 +61,12 @@
 
 		if (localStorageRound) {
 			roundCounter = JSON.parse(localStorageRound);
+		}
+		if (localOrder) {
+			order = JSON.parse(localOrder);
+		}
+		if (localGone) {
+			gone = JSON.parse(localGone);
 		}
 	}
 
@@ -77,11 +87,16 @@
 		});
 
 		channel.subscribe('update game state', (message) => {
-			roundCounter = message.data.round;
+			if (message.data.round > roundCounter) {
+				roundCounter = message.data.round;
+			}
 			currentPlayer = message.data.currentPlayer;
 			currentTurn = message.data.currentTurn;
 			startCounter = message.data.startCounter;
+			gone = message.data.gone;
+			order = message.data.order;
 		});
+
 		// channel.subscribe('update round counter', (message) => {
 		// 	roundNumbers = message.data.rounds;
 		// 	roundCounter = roundNumbers[0];
@@ -91,19 +106,39 @@
 			users = await channel.presence.get();
 			for (const user of users) {
 				scores[user.clientId] = message.data.score;
+				if (!order.includes(user.clientId)) {
+					order.push(user.clientId);
+				}
+				if (gone.includes(user.clientId)) {
+					gone.splice(gone.indexOf(user.clientId), 1);
+				}
 			}
+			window.localStorage.setItem('playerOrder', JSON.stringify(order));
+			window.localStorage.setItem('playersGone', JSON.stringify(gone));
+			console.log('player order: ' + order);
+			console.log('players gone: ' + gone);
+
 			channel.publish('update game state', {
 				currentPlayer: currentPlayer,
 				round: roundCounter,
 				currentTurn: currentTurn,
-				startCounter: 1
+				startCounter: 1,
+				order: order,
+				gone: gone
 			});
+
+			channel.publish('get player order', {});
 
 			channel.publish('update score', { score: hits, user: data.user });
 		});
 
 		channel.subscribe('user left room', (message) => {
 			delete scores[message.data.user];
+			if (!gone.includes(message.data.user)) {
+				gone.push(message.data.user);
+			}
+			console.log(gone);
+			window.localStorage.setItem('playersGone', JSON.stringify(gone));
 			scores = scores;
 		});
 
@@ -117,14 +152,23 @@
 
 		channel.subscribe('pass turn', (message) => {
 			if (startCounter < 1) {
-				currentPlayer = Object.keys(scores)[currentTurn];
+				currentPlayer = order[currentTurn];
 				startCounter = 1;
 			} else {
-				currentTurn = (currentTurn + 1) % Object.keys(scores).length;
-				currentPlayer = Object.keys(scores)[currentTurn];
+				console.log(currentTurn);
+				currentTurn = (currentTurn + 1) % order.length;
+				console.log(currentTurn);
 
-				if (currentTurn == 0 && startCounter > 0) {
+				currentPlayer = order[currentTurn];
+				if (currentTurn == 0) {
 					roundCounter++;
+				}
+				while (gone.includes(currentPlayer)) {
+					currentTurn = (currentTurn + 1) % order.length;
+					currentPlayer = order[currentTurn];
+					if (currentTurn == 0) {
+						roundCounter++;
+					}
 				}
 			}
 
@@ -138,6 +182,7 @@
 			channel.publish('update round counter', { rounds: roundNumbers });
 			console.log(roundNumbers);
 			console.log(currentTurn);
+			console.log(currentPlayer);
 		});
 
 		channel.subscribe('restart game', () => {
@@ -179,6 +224,7 @@
 	});
 
 	function handleClick(key) {
+		if (!(currentPlayer == data.user || order[currentTurn] == data.user)) return;
 		if (hits[key] == finished) return;
 
 		hitsForRound.push(key);
@@ -195,6 +241,8 @@
 	}
 
 	function undo(key) {
+		if (!(currentPlayer == data.user || order[currentTurn] == data.user)) return;
+
 		if (hits[key] > 0) {
 			hits[key]--;
 			hitsForRound.pop();
@@ -266,8 +314,7 @@
 		>
 	{/if}
 	<p>
-		<!-- {currentPlayer ? 'Its ' + currentPlayer + "'s turn" : 'Game not started yet'}
-	</p> -->
+		{currentPlayer ? 'Its ' + currentPlayer + "'s turn" : order[currentTurn]}
 	</p>
 	<p class="text-2xl font-bold">Round: {roundCounter}</p>
 	{#if roundCounter < 2}
@@ -275,7 +322,6 @@
 			<i>Everyone has to press once for the round number to change </i>
 		</p>
 	{/if}
-	<i>{currentTurn}/{Object.keys(scores).length} presses</i>
 </div>
 
 <div class="flex flex-col justify-center items-center text-white">
@@ -288,23 +334,27 @@
 </div>
 
 <div class="flex flex-col justify-center items-center text-white">
-	{#each numbers as key}
-		<div class="text-white">
-			<button
-				on:click={() => handleClick(key)}
-				name={key}
-				class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-				>{key}</button
-			>
-			<label class="m-1" for={key}>{hits[key]}</label>
-			<button
-				on:click={() => undo(key)}
-				class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-			>
-				undo
-			</button>
-		</div>
-	{/each}
+	{#if data.user == currentPlayer || data.user == order[currentTurn]}
+		{#each numbers as key}
+			<div class="text-white">
+				<button
+					on:click={() => handleClick(key)}
+					name={key}
+					class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+					>{key}</button
+				>
+				<label class="m-1" for={key}>{hits[key]}</label>
+				<button
+					on:click={() => undo(key)}
+					class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+				>
+					undo
+				</button>
+			</div>
+		{/each}
+	{:else}
+		<p class="my-10">Wait until your turn</p>
+	{/if}
 	<button
 		on:click={() => {
 			channel.publish('restart game', { yes: 'yes' });
