@@ -3,13 +3,9 @@ import {db} from "$lib/db.js";
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
 
-const hitPerRound = {};
-
-const players = db.mickey_dummy_data_rounds.findMany({
-    orderBy:{
-        currentround:"asc"
-    }
-
+const players = db.mickey_real_data_v_1.findMany({
+    
+    
 });
 
 return {players}

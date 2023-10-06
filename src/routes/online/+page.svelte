@@ -6,10 +6,11 @@
 	export let data;
 
 	let pins = null;
-	let roomPin;
+	let roomPin = '';
 	let joiningRoom = false;
 	let creatingRoom = false;
-	let validPins = [];
+	let numberOfRooms = 0;
+	const validPins = new Set();
 
 	onMount(() => {
 		const ably = new Ably.Realtime.Promise({
@@ -17,30 +18,34 @@
 			clientId: data.user || null
 		});
 
-		localStorage.setItem(
-			'hits',
-			JSON.stringify({
-				Double: 0,
-				Triple: 0,
-				Bull: 0,
-				'20': 0,
-				'19': 0,
-				'18': 0,
-				'17': 0,
-				'16': 0,
-				'15': 0,
-				'14': 0,
-				'13': 0,
-				'12': 0
-			})
-		);
+		if (!localStorage.getItem('hits')) {
+			localStorage.setItem(
+				'hits',
+				JSON.stringify({
+					Double: 0,
+					Triple: 0,
+					Bull: 0,
+					'20': 0,
+					'19': 0,
+					'18': 0,
+					'17': 0,
+					'16': 0,
+					'15': 0,
+					'14': 0,
+					'13': 0,
+					'12': 0
+				})
+			);
+		}
 
 		pins = ably.channels.get('roomPins');
 
 		pins.subscribe('new pin', (message) => {
-			validPins = [...validPins, message.data.pin];
+			validPins.add(message.data.pin);
 			console.log(validPins);
+			numberOfRooms = validPins.size;
 		});
+		pins.publish('get rooms', {});
 		pins.subscribe('no players in room', (message) => {
 			validPins.splice(validPins.indexOf(message.data.pin, 1));
 			console.log(validPins);
@@ -86,6 +91,7 @@
 	{#if form?.error}
 		<p class="text-red-500 mt-3">{form.message}!</p>
 	{/if}
+	<p class="mt-4 font-bold">Currently active rooms: {numberOfRooms}</p>
 </div>
 <div class="w-screen bg-black flex flex-col justify-center items-center text-white mt-10">
 	{#if joiningRoom}
@@ -106,11 +112,15 @@
 					name="room"
 					bind:value={roomPin}
 				/>
-
-				<button
-					class="m-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-					type="submit">Join Room</button
-				>
+				{#if roomPin.length >= 1 && validPins.has(roomPin)}
+					<p class="text-green-600">Pin is valid</p>
+					<button
+						class="m-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+						type="submit">Join Room</button
+					>
+				{:else if roomPin.length >= 1}
+					<p class="text-red-600">No active room with that pin</p>
+				{/if}
 			</form>
 			<button class="ml-2 hover:underline text-md" on:click={() => (joiningRoom = false)}
 				>Close</button
