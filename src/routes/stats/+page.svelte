@@ -68,20 +68,7 @@
 		counter = {};
 	}
 
-	let myData = {
-		datasets: [
-			{
-				label: Object.keys(hitPerRound)[0].split(' ')[1],
-				data: [
-					{
-						x: Object.keys(hitPerRound)[0].split(' ')[0],
-						y: hitPerRound[Object.keys(hitPerRound)[0]][0],
-						r: hitPerRound[Object.keys(hitPerRound)[0]][2]['20'] * 2
-					}
-				]
-			}
-		]
-	};
+	let myData = {};
 	const keys = sortObjectKeysByRoundNumber(hitPerRound);
 	for (let key of keys) {
 		const label = key.split(' ')[1]; // Extract the label from the key

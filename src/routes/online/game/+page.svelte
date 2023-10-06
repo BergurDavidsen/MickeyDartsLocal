@@ -28,6 +28,7 @@
 	let startCounter = 0;
 	let order = [];
 	let gone = [];
+	let wantsToRestart = false;
 
 	let hits = {
 		Double: 0,
@@ -81,6 +82,9 @@
 		channel = ably.channels.get(roomPin);
 		pins = ably.channels.get('roomPins');
 		pins.publish('new pin', { pin: roomPin });
+		pins.subscribe('get rooms', (message) => {
+			pins.publish('new pin', { pin: roomPin });
+		});
 
 		channel.subscribe('update score', (message) => {
 			scores[message.data.user] = message.data.score;
@@ -356,10 +360,15 @@
 		<p class="my-10">Wait until your turn</p>
 	{/if}
 	<button
-		on:click={() => {
-			channel.publish('restart game', { yes: 'yes' });
-		}}
-		class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-900"
-		>Restart game</button
-	>
+		on:click={() => (wantsToRestart = !wantsToRestart)}
+		class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+		>{wantsToRestart ? 'Cancel' : 'Restart?'}
+	</button>
+	{#if wantsToRestart}
+		<button
+			on:click={() => channel.publish('restart game', {})}
+			class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+			>Confirm</button
+		>
+	{/if}
 </div>
