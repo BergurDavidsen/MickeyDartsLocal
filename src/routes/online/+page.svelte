@@ -79,7 +79,7 @@
 	<h1
 		class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
 	>
-		Welcome to Mickey Darts ✨Online✨ <i>(Alpha)</i>
+		Welcome to Mickey Darts ✨Online✨ <i>(Beta)</i>
 	</h1>
 	<p class="mt-3">
 		The rules are the same as always, but instead of using only one screen in pass and play mode,
