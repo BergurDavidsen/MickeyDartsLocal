@@ -3,6 +3,7 @@
 	import Chart from 'chart.js/auto';
 
 	export let mydata;
+	export let myID;
 
 	let chartInstance;
 
@@ -10,7 +11,7 @@
 	let currentColor = colors[Math.floor(Math.random() * colors.length)];
 
 	onMount(() => {
-		const ctx = document.getElementById('myChart').getContext('2d');
+		const ctx = document.getElementById(myID).getContext('2d');
 		chartInstance = new Chart(ctx, {
 			type: 'bubble', // Specify the chart type (e.g., bar, line, pie, etc.)
 			data: mydata,
@@ -40,4 +41,4 @@
 	});
 </script>
 
-<canvas id="myChart" class="bg-white rounded-md my-4 border-4 border-{currentColor}-600" />
+<canvas id={myID} class="bg-white rounded-md my-4 border-4 border-{currentColor}-600" />

@@ -62,15 +62,6 @@ model limping_rainmaker {
   validtime String? @db.VarChar(255)
 }
 
-model loyal_convertible {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  latitude  String? @db.VarChar(255)
-  longitude String? @db.VarChar(255)
-  record    String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
-}
-
 model mickey_real_data_v_1 {
   id           Int     @id @default(autoincrement())
   currentround String? @db.VarChar(255)
@@ -81,7 +72,7 @@ model mickey_real_data_v_1 {
   validtime    String? @db.VarChar(255)
 }
 
-model scholarly_boom {
+model active_dysfunction {
   id        Int     @id @default(autoincrement())
   eventid   String? @db.VarChar(255)
   latitude  String? @db.VarChar(255)
@@ -90,11 +81,13 @@ model scholarly_boom {
   validtime String? @db.VarChar(255)
 }
 
-model simplistic_laborer {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  latitude  String? @db.VarChar(255)
-  longitude String? @db.VarChar(255)
-  record    String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
+model mickey_real_data_v_2 {
+  id           Int     @id @default(autoincrement())
+  currentround String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
 }

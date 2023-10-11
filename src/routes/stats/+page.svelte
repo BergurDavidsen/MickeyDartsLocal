@@ -7,9 +7,34 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let hits = data.players;
-	let datasets = [];
+	const winners = data.winners;
 
-	let labels = [];
+	let datasets = [];
+	let winCounts = {};
+	for (let winner of winners) {
+		if (Object.keys(winCounts).includes(winner['player'])) {
+			winCounts[winner['player']] = winCounts[winner['player']] + 1;
+		} else {
+			winCounts[winner['player']] = 1;
+		}
+	}
+
+	function sortObjectKeysByWins(obj) {
+		// Get the keys of the object
+		const keys = Object.keys(obj);
+
+		// Sort the keys based on the round number
+		keys.sort((a, b) => {
+			const winsA = obj[a];
+			const winsB = obj[b];
+			return winsB - winsA;
+		});
+
+		// Return the sorted keys
+
+		return keys;
+	}
+	const sortedWinners = sortObjectKeysByWins(winCounts);
 
 	function getRandomRGB() {
 		const r = Math.floor(Math.random() * 256); // Random value between 0 and 255 for red
@@ -99,8 +124,8 @@
 	myData = { datasets: Object.values(datasets) }; // Convert the object to an array of datasets
 </script>
 
-<div class="flex flex-col justify-center items-center text-center my-3">
-	<div class="border-2 border-white rounded-xl">
+<div class="flex flex-col justify-center items-center text-center my-3 bg-black">
+	<div class="border-2 border-red-500 rounded-xl bg-black">
 		<h1 class="text-white my-3 font-bold text-4xl">Player Stats</h1>
 		<p class="text-white my-3 font-medium mx-2 text-lg">
 			Here you can see live player stats for each round. <i
@@ -109,10 +134,58 @@
 			>
 		</p>
 	</div>
-	<BubbleChart mydata={myData} />
+	<h1 class="text-white text-4xl font-bold mt-4">All Time Stats</h1>
+	<BubbleChart mydata={myData} myID={'allPlayers'} />
+
+	<h1 class="text-white text-4xl font-bold mt-4">Leaderboards</h1>
+	{#if winners.length > 0}
+		<table class="table-auto w-full bg-white rounded-xl text-center my-4">
+			<caption class="text-white mb-4 font-bold text-2xl">Fastest win</caption>
+			<thead>
+				<th class="p-3 border-r">Position</th>
+				<th class="p-3">Player</th>
+				<th class="p-3 border-l">Finish round</th>
+			</thead>
+			<tbody>
+				{#each winners as winner, index}
+					<tr class="border-t rounded-sm">
+						<td class="p-3 border-r">{index + 1}</td>
+						<td class="p-3">{winner['player']}</td>
+						<td class=" border-l">{winner['currentround']}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+
+		<table class="table-auto w-full mx-1 bg-white rounded-xl text-center my-4">
+			<caption class="text-white mb-4 font-bold text-2xl">Most wins</caption>
+			<thead class="">
+				<th class="p-3 border-r">Position</th>
+				<th class="p-3">Player</th>
+				<th class="p-3 border-l">Total Wins</th>
+			</thead>
+			<tbody>
+				{#each sortedWinners as winner, index}
+					<tr class="border-t rounded-sm">
+						<td class="p-4 border-r">{index + 1}</td>
+						<td class="p-4">{winner}</td>
+						<td class="p-4 border-l">{winCounts[winner]}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		<h1 class="my-6 text-white font-bold text-2xl">No winners Yet</h1>
+	{/if}
+	<button
+		on:click={() => goto('/stats/previousgames')}
+		class="my-4 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
+		>See all games</button
+	>
+
 	<button
 		on:click={() => goto('/')}
-		class="m-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+		class="my-3 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
 		>Back To Start</button
 	>
 </div>
