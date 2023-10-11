@@ -94,7 +94,9 @@
 			]['validtime'].split('T')[1]}
 		</h2>
 		<h2 class=" font-bold text-sm text-white">
-			Date: {games[Object.keys(games)[index]][0]['validtime'].split('T')[0]}
+			Date: {games[Object.keys(games)[Object.keys(games).length - index - 1]][
+				games[Object.keys(games)[Object.keys(games).length - index - 1]].length - 1
+			]['validtime'].split('T')[0]}
 		</h2>
 		<BubbleChart mydata={dataset} myID={Object.keys(games)[index]} />
 	{/each}
