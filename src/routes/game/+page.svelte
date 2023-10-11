@@ -108,22 +108,23 @@
 		if (players[player][key] < 3) {
 			players[player][key] += 1;
 			players[player]['score'] += 1;
-			let dataMessage = JSON.stringify({
-				gameID: sessioId,
-				player: player.toUpperCase(),
-				hit: key,
-				currentRound: roundCounter
-			});
-			postDataToDatabase(dataMessage);
 		}
 
-		if (players[player][key] >= 3) {
+		if (players[player][key] > 2) {
 			players[player][key] = finished;
 			checkWinner();
 		}
 		if (browser) {
 			window.localStorage.setItem('state', JSON.stringify(players));
 		}
+		let dataMessage = JSON.stringify({
+			gameID: sessioId,
+			player: player.toUpperCase(),
+			hit: key,
+			currentRound: roundCounter,
+			isWinner: winners.includes(player)
+		});
+		postDataToDatabase(dataMessage);
 	}
 
 	function undo(key) {

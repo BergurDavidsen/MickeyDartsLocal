@@ -3,12 +3,21 @@ import {db} from "$lib/db.js";
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
 
-const players = db.mickey_real_data_v_1.findMany({
+const players = db.mickey_real_data_v_2.findMany({
     
     
 });
-
-return {players}
+const winners = db.mickey_real_data_v_2.findMany({
+    where: {
+      iswinner: "true",
+    },
+    orderBy: [
+    
+        { currentround: "asc" },
+        { player: "asc" },
+    ],
+  });
+return {players, winners}
 
 }
 export const actions = {
