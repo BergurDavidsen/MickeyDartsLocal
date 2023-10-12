@@ -1,16 +1,20 @@
 import { redirect } from "@sveltejs/kit";
 import { API_KEY } from '$env/static/private';
 
+
+
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies, url}) {
     if(!cookies.get("user")){
         throw redirect(303,"/online");
     }
     const roomPin = url.searchParams.get("room");
-    const user = cookies.get("user")
+    const user = cookies.get("user");
+    const gameID = url.searchParams.get("sessionID");
+
     
 
-    return {user, API_KEY, roomPin};
+    return {user, API_KEY, roomPin,gameID};
 };
 
 export const actions = {
