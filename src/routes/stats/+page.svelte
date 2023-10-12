@@ -19,23 +19,15 @@
 		}
 	}
 
-	function sortObjectKeysByWins(obj) {
-		// Get the keys of the object
-		const keys = Object.keys(obj);
-
-		// Sort the keys based on the round number
-		keys.sort((a, b) => {
-			const winsA = obj[a];
-			const winsB = obj[b];
-			return winsB - winsA;
-		});
-
-		// Return the sorted keys
-
-		return keys;
-	}
-	const sortedWinners = sortObjectKeysByWins(winCounts);
-
+	const sortedWinners = Object.fromEntries(
+		Object.entries(winCounts).sort((a, b) => {
+			if (b[1] - a[1] === 0) {
+				return a[0].localeCompare(b[0]);
+			}
+			return b[1] - a[1];
+		})
+	);
+	console.log(sortedWinners);
 	function getRandomRGB() {
 		const r = Math.floor(Math.random() * 256); // Random value between 0 and 255 for red
 		const g = Math.floor(Math.random() * 256); // Random value between 0 and 255 for green
@@ -125,22 +117,25 @@
 </script>
 
 <div class="flex flex-col justify-center items-center text-center my-3 bg-black">
-	<div class="border-2 border-red-500 rounded-xl bg-black">
-		<h1 class="text-white my-3 font-bold text-4xl">Player Stats</h1>
-		<p class="text-white my-3 font-medium mx-2 text-lg">
+	<div class="border-2 border-red-500 rounded-xl bg-black mb-5">
+		<h1 class="text-green-500 my-3 font-bold text-4xl">Player Stats</h1>
+		<p class="text-yellow-500 my-3 font-medium mx-2 text-lg">
 			Here you can see live player stats for each round. <i
 				>The bubbles are 2x the amount of hits on that specific part of the board. (If you are on
 				mobile, go into landscape mode to see the full chart 😊 )</i
 			>
 		</p>
 	</div>
-	<h1 class="text-white text-4xl font-bold mt-4">All Time Stats</h1>
-	<BubbleChart mydata={myData} myID={'allPlayers'} />
-
-	<h1 class="text-white text-4xl font-bold mt-4">Leaderboards</h1>
+	<h1 class="text-green-500 text-4xl font-bold mt-4">All Time Stats</h1>
+	{#if hits.length < 1}
+		<h2 class="my-10 text-red-500 font-bold text-2xl">No Stats Yet</h2>
+	{:else}
+		<BubbleChart mydata={myData} myID={'allPlayers'} />
+	{/if}
+	<h1 class="text-green-500 text-4xl font-bold mt-4">Leaderboards</h1>
 	{#if winners.length > 0}
 		<table class="table-auto w-full bg-white rounded-xl text-center my-4">
-			<caption class="text-white mb-4 font-bold text-2xl">Fastest win</caption>
+			<caption class="text-yellow-500 mb-4 font-bold text-2xl">Fastest win</caption>
 			<thead>
 				<th class="p-3 border-r">Position</th>
 				<th class="p-3">Player</th>
@@ -157,35 +152,37 @@
 			</tbody>
 		</table>
 
-		<table class="table-auto w-full mx-1 bg-white rounded-xl text-center my-4">
-			<caption class="text-white mb-4 font-bold text-2xl">Most wins</caption>
+		<table class="table-auto w-full bg-white rounded-xl text-center my-4">
+			<caption class="text-yellow-500 mb-4 font-bold text-2xl">Most wins</caption>
 			<thead class="">
 				<th class="p-3 border-r">Position</th>
 				<th class="p-3">Player</th>
 				<th class="p-3 border-l">Total Wins</th>
 			</thead>
 			<tbody>
-				{#each sortedWinners as winner, index}
+				{#each Object.keys(sortedWinners) as winner, index}
 					<tr class="border-t rounded-sm">
 						<td class="p-4 border-r">{index + 1}</td>
 						<td class="p-4">{winner}</td>
-						<td class="p-4 border-l">{winCounts[winner]}</td>
+						<td class="p-4 border-l">{sortedWinners[winner]}</td>
 					</tr>
 				{/each}
 			</tbody>
 		</table>
 	{:else}
-		<h1 class="my-6 text-white font-bold text-2xl">No winners Yet</h1>
+		<h1 class="my-10 text-red-500 font-bold text-2xl">No winners Yet</h1>
 	{/if}
-	<button
-		on:click={() => goto('/stats/previousgames')}
-		class="my-4 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
-		>See all games</button
-	>
+	<div class="flex flex-col justify-center items-center">
+		<button
+			on:click={() => goto('/stats/previousgames')}
+			class="mb-7 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
+			>See all games</button
+		>
 
-	<button
-		on:click={() => goto('/')}
-		class="my-3 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-		>Back To Start</button
-	>
+		<button
+			on:click={() => goto('/')}
+			class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+			>Back To Start</button
+		>
+	</div>
 </div>

@@ -10,6 +10,7 @@
 	let joiningRoom = false;
 	let creatingRoom = false;
 	let numberOfRooms = 0;
+	let pinToID = {};
 	const validPins = new Set();
 
 	onMount(() => {
@@ -42,7 +43,8 @@
 
 		pins.subscribe('new pin', (message) => {
 			validPins.add(message.data.pin);
-			console.log(validPins);
+			pinToID[message.data.pin] = message.data.gameID;
+			console.log(pinToID);
 			numberOfRooms = validPins.size;
 		});
 		pins.publish('get rooms', {});
@@ -106,12 +108,14 @@
 				<input class="m-2 p-2 border-black border rounded-md shadow-md" type="text" name="user" />
 
 				<label class="m-2" for="room">Room Pin:</label>
+				<input type="text" value={pinToID[roomPin]} hidden name="gameID" />
 				<input
 					class="m-2 p-2 border-black border rounded-md shadow-md"
 					type="text"
 					name="room"
 					bind:value={roomPin}
 				/>
+
 				{#if roomPin.length >= 1 && validPins.has(roomPin)}
 					<p class="text-green-600">Pin is valid</p>
 					<button

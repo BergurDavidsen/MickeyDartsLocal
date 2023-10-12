@@ -7,13 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model flimsy_pressroom {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  message   String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
-}
-
 model mickey_dummy_data {
   id           Int     @id @default(autoincrement())
   currentscore String? @db.VarChar(255)
@@ -35,13 +28,6 @@ model mickey_dummy_test_data {
   validtime    String? @db.VarChar(255)
 }
 
-model mickey_test_data {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  message   String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
-}
-
 model mickey_dummy_data_rounds {
   id           Int     @id @default(autoincrement())
   currentround String? @db.VarChar(255)
@@ -55,13 +41,6 @@ model mickey_dummy_data_rounds {
   validtime    String? @db.VarChar(255)
 }
 
-model limping_rainmaker {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  message   String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
-}
-
 model mickey_real_data_v_1 {
   id           Int     @id @default(autoincrement())
   currentround String? @db.VarChar(255)
@@ -72,18 +51,31 @@ model mickey_real_data_v_1 {
   validtime    String? @db.VarChar(255)
 }
 
-model active_dysfunction {
-  id        Int     @id @default(autoincrement())
-  eventid   String? @db.VarChar(255)
-  latitude  String? @db.VarChar(255)
-  longitude String? @db.VarChar(255)
-  record    String? @db.VarChar(255)
-  validtime String? @db.VarChar(255)
-}
-
 model mickey_real_data_v_2 {
   id           Int     @id @default(autoincrement())
   currentround String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_real_data_v_3 {
+  id           Int     @id @default(autoincrement())
+  currentround String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_real_data_v_4 {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
   eventid      String? @db.VarChar(255)
   gameid       String? @db.VarChar(255)
   hit          String? @db.VarChar(255)

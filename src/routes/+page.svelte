@@ -25,11 +25,11 @@
 	class="bg-black w-screen flex flex-col justify-center items-center text-white text-center mt-5"
 >
 	<h1
-		class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+		class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-green-600"
 	>
 		Welcome to Mickey (The Dart Game)
 	</h1>
-	<p class="mt-3">
+	<p class="mt-3 text-yellow-500">
 		Your aim is to close out the numbers from twelve to twenty, along with three doubles, triples,
 		and the bullseye. Players take turns throwing three darts each. Close out a number by hitting it
 		three times. Hits don't have to be in the same round.
@@ -66,14 +66,14 @@
 	{/if}
 	{#if !creatingRoom}
 		<button
-			class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+			class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
 			on:click={() => handleCreate()}>Create Game (Pass and play)</button
 		>
 	{/if}
 </div>
 <div class="flex flex-col items-center justify-center my-4">
 	<button
-		class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+		class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
 		on:click={() => goto('/online/')}
 	>
 		Online (Beta)

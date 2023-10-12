@@ -9,7 +9,7 @@
 	export let data;
 
 	const roomPin = data.roomPin;
-	const ably = data.ably;
+	const gameID = data.gameID;
 	const finished = 'Done!';
 	let isWinner = false;
 	let lastRound = null;
@@ -29,6 +29,8 @@
 	let order = [];
 	let gone = [];
 	let wantsToRestart = false;
+	const url =
+		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
 
 	let hits = {
 		Double: 0,
@@ -81,9 +83,9 @@
 
 		channel = ably.channels.get(roomPin);
 		pins = ably.channels.get('roomPins');
-		pins.publish('new pin', { pin: roomPin });
+		pins.publish('new pin', { pin: roomPin, gameID: gameID });
 		pins.subscribe('get rooms', (message) => {
-			pins.publish('new pin', { pin: roomPin });
+			pins.publish('new pin', { pin: roomPin, gameID: gameID });
 		});
 
 		channel.subscribe('update score', (message) => {
@@ -138,6 +140,7 @@
 
 		channel.subscribe('user left room', (message) => {
 			delete scores[message.data.user];
+
 			if (!gone.includes(message.data.user)) {
 				gone.push(message.data.user);
 			}
@@ -227,6 +230,28 @@
 		};
 	});
 
+	async function postDataToDatabase(data) {
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: data
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			console.log('data sent');
+			return response.json();
+		} catch (error) {
+			console.error('Error sending data:', error);
+			throw error; // Re-throw the error to propagate it further if needed
+		}
+	}
+
 	function handleClick(key) {
 		if (!(currentPlayer == data.user || order[currentTurn] == data.user)) return;
 		if (hits[key] == finished) return;
@@ -242,6 +267,14 @@
 		}
 		window.localStorage.setItem('hits', JSON.stringify(hits));
 		channel.publish('update score', { score: hits, user: data.user });
+		let dataMessage = JSON.stringify({
+			gameID: gameID,
+			player: data.user.toUpperCase(),
+			hit: key,
+			currentRound: roundCounter,
+			isWinner: isWinner
+		});
+		postDataToDatabase(dataMessage);
 	}
 
 	function undo(key) {
