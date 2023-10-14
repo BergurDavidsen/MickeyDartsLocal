@@ -131,10 +131,11 @@
 	{:else}
 		<BubbleChart mydata={myData} myID={'allPlayers'} />
 	{/if}
-	<button
-		on:click={() => goto('/stats/previousgames')}
+
+	<a
+		href="/stats/previousgames"
 		class="mb-7 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
-		>See all games</button
+		>See All Games</a
 	>
 	<h1 class="text-green-500 text-4xl font-bold mt-4">Leaderboards</h1>
 	{#if winners.length > 0}
@@ -177,10 +178,10 @@
 		<h1 class="my-10 text-red-500 font-bold text-2xl">No winners Yet</h1>
 	{/if}
 	<div class="flex flex-col justify-center items-center">
-		<button
-			on:click={() => goto('/')}
+		<a
+			href="/"
 			class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-			>Back To Start</button
+			>Back To Start</a
 		>
 	</div>
 </div>
