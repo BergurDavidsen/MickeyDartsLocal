@@ -178,7 +178,7 @@
 
 {#if tableNumbers}
 	<div class="mx-2 flex flex-col justify-center items-center">
-		<table class="bg-white mt-2 text-center">
+		<table class=" mt-2 text-center">
 			<tr>
 				<th class="border border-white text-white p-2 bg-black capitalize">Targets</th>
 				{#each Object.keys(players) as players}
