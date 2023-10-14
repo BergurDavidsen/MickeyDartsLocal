@@ -7,12 +7,6 @@
 
 	const sessioId = data.sessionID;
 
-	const colorScore = {
-		0: 'red-500',
-		1: 'yellow-400',
-		2: 'yellow-400',
-		'Done!': 'green-400'
-	};
 	let turnIndex = 0;
 	const finished = 'Done!';
 	let roundCounter = 1;
@@ -22,6 +16,12 @@
 	let tableNumbers;
 	let winners = [];
 	let wantsToRestart = false;
+	const colorScore = {
+		0: 'bg-red-500',
+		1: 'bg-yellow-400',
+		2: 'bg-yellow-400',
+		'Done!': 'bg-green-400'
+	};
 
 	const url =
 		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
@@ -194,7 +194,7 @@
 						{#if number == 'score'}
 							<td class="border border-white bg-black text-white">{players[player][number]}/36</td>
 						{:else}
-							<td class="border border-black text-white bg-{colorScore[players[player][number]]}"
+							<td class="border border-black text-white {colorScore[players[player][number]]}"
 								>{players[player][number]}</td
 							>
 						{/if}
