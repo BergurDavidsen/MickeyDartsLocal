@@ -33,7 +33,7 @@ export const actions = {
 
     create: async({request,url, cookies}) => {
         const data = await request.formData();
-        const room = Math.round(Math.random()*(99999 - 10000))+10000;
+        const room = Math.round(Math.random()*(999999 - 100000))+100000;
         const user = data.get("user");
         const gameID = uuidv4();
 
