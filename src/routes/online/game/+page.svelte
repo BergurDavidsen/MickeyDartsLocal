@@ -8,6 +8,12 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
+	const colorScore = {
+		0: 'red-500',
+		1: 'yellow-400',
+		2: 'yellow-400',
+		'Done!': 'green-400'
+	};
 	const roomPin = data.roomPin;
 	const gameID = data.gameID;
 	const finished = 'Done!';
@@ -59,7 +65,6 @@
 		if (localPlayer) {
 			currentPlayer = JSON.parse(localPlayer);
 			currentTurn = JSON.parse(window.localStorage.getItem('currentTurn'));
-			console.log(currentPlayer, currentTurn);
 		}
 
 		if (localStorageRound) {
@@ -121,8 +126,6 @@
 			}
 			window.localStorage.setItem('playerOrder', JSON.stringify(order));
 			window.localStorage.setItem('playersGone', JSON.stringify(gone));
-			console.log('player order: ' + order);
-			console.log('players gone: ' + gone);
 
 			channel.publish('update game state', {
 				currentPlayer: currentPlayer,
@@ -144,7 +147,6 @@
 			if (!gone.includes(message.data.user)) {
 				gone.push(message.data.user);
 			}
-			console.log(gone);
 			window.localStorage.setItem('playersGone', JSON.stringify(gone));
 			scores = scores;
 		});
@@ -153,8 +155,6 @@
 			if (!winners.includes(message.data.user)) {
 				winners.push(message.data.user);
 			}
-
-			console.log(winners);
 		});
 
 		channel.subscribe('pass turn', (message) => {
@@ -162,9 +162,7 @@
 				currentPlayer = order[currentTurn];
 				startCounter = 1;
 			} else {
-				console.log(currentTurn);
 				currentTurn = (currentTurn + 1) % order.length;
-				console.log(currentTurn);
 
 				currentPlayer = order[currentTurn];
 				if (currentTurn == 0) {
@@ -187,9 +185,6 @@
 			window.localStorage.setItem('roundCounter', JSON.stringify(roundCounter));
 			roundNumbers.unshift(roundCounter);
 			channel.publish('update round counter', { rounds: roundNumbers });
-			console.log(roundNumbers);
-			console.log(currentTurn);
-			console.log(currentPlayer);
 		});
 
 		channel.subscribe('restart game', () => {
@@ -244,11 +239,10 @@
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 
-			console.log('data sent');
-			return response.json();
+			return response;
 		} catch (error) {
 			console.error('Error sending data:', error);
-			throw error; // Re-throw the error to propagate it further if needed
+			// Re-throw the error to propagate it further if needed
 		}
 	}
 
@@ -257,7 +251,6 @@
 		if (hits[key] == finished) return;
 
 		hitsForRound.push(key);
-		console.log(hitsForRound);
 		if (hits[key] < 3) {
 			hits[key] = hits[key] + 1;
 		}
@@ -313,25 +306,28 @@
 	}
 </script>
 
-<h1 class="text-white font-bold">Room pin: {roomPin}</h1>
-<h1 class="text-white font-bold">Username: {data.user}</h1>
+<h1 class="mt-2 text-green-400 font-bold capitalize">Room pin: {roomPin}</h1>
+<h1 class="mb-2 text-yellow-400 font-bold capitalize">Username: {data.user}</h1>
 
 <div class="flex flex-col justify-center items-center text-black">
 	<table class="rounded-md shadow-lg m-2">
 		<tr>
-			<th class="p-2 border border-white bg-gray-300">Numbers</th>
+			<th class="p-2 border border-white bg-black text-white">Targets</th>
 			{#each Object.keys(scores) as player}
-				<th class="p-2 capitalize border border-white bg-gray-300">
+				<th class="p-2 capitalize border border-white bg-black text-white">
 					{winners.includes(player) ? player + ' is done!' : player}
 				</th>
 			{/each}
 		</tr>
 		{#each numbers as number}
 			<tr>
-				<td class="border border-black bg-white text-center">{number}</td>
+				<td class="border border-white bg-black text-center text-white">{number}</td>
 
 				{#each Object.keys(scores) as key}
-					<td class="border border-black bg-white text-center">{scores[key][number]}</td>
+					<td
+						class="border border-black bg-{colorScore[scores[key][number]]} text-center text-white"
+						>{scores[key][number]}</td
+					>
 				{/each}
 			</tr>
 		{/each}
@@ -350,15 +346,10 @@
 			}}>End Game <i>(Back to home page)</i></button
 		>
 	{/if}
-	<p>
-		{currentPlayer ? 'Its ' + currentPlayer + "'s turn" : order[currentTurn]}
+	<p class="text-white capitalize">
+		{currentPlayer ? 'Its ' + currentPlayer + "'s turn" : 'Its ' + order[currentTurn] + "'s turn"}
 	</p>
 	<p class="text-2xl font-bold">Round: {roundCounter}</p>
-	{#if roundCounter < 2}
-		<p class="my-2">
-			<i>Everyone has to press once for the round number to change </i>
-		</p>
-	{/if}
 </div>
 
 <div class="flex flex-col justify-center items-center text-white">

@@ -65,7 +65,7 @@
 				dataPoints.push({
 					x: key.split(' ')[0],
 					y: yPos,
-					r: hitPerRound[key][hitPerRound[key].length - 1][yPos] * 2
+					r: hitPerRound[key][hitPerRound[key].length - 1][yPos] * 3
 				});
 			}
 
@@ -92,21 +92,27 @@
 			<h1 class="text-red-500 text-4xl font-bold">No Games Played Yet</h1>
 		</div>
 	{:else}
-		{#each allDatasets.reverse() as dataset, index}
+		{#each allDatasets as dataset, index}
 			<h1 class="mt-4 font-bold text-2xl text-green-500">
 				Game Number {allDatasets.length - index}
 			</h1>
 
 			<h2 class=" font-bold text-sm text-red-500">
-				Time: {games[Object.keys(games)[Object.keys(games).length - index - 1]][
+				<!-- Time: {games[Object.keys(games)[Object.keys(games).length - index - 1]][
 					games[Object.keys(games)[Object.keys(games).length - index - 1]].length - 1
-				]['validtime'].split('T')[1]}
+				]['validtime'].split('T')[1]} -->
+				Time: {games[Object.keys(games)[index]][games[Object.keys(games)[index]].length - 1][
+					'validtime'
+				].split('T')[1]}
 			</h2>
 			<h2 class=" font-bold text-sm text-yellow-500">
-				Date: {games[Object.keys(games)[Object.keys(games).length - index - 1]][
-					games[Object.keys(games)[Object.keys(games).length - index - 1]].length - 1
-				]['validtime'].split('T')[0]}
+				Date: {games[Object.keys(games)[index]][games[Object.keys(games)[index]].length - 1][
+					'validtime'
+				].split('T')[0]}
 			</h2>
+			<!-- <h2 class="font-bold text-xs text-blue-500">
+				{Object.keys(games)[Object.keys(games).length - index - 1]}
+			</h2> -->
 			<BubbleChart mydata={dataset} myID={Object.keys(games)[index]} />
 		{/each}
 	{/if}

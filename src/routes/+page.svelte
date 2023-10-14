@@ -27,7 +27,7 @@
 	<h1
 		class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-green-600"
 	>
-		Welcome to Mickey (The Dart Game)
+		Welcome to Mickey <br /> (The Dart Game)
 	</h1>
 	<p class="mt-3 text-yellow-500">
 		Your aim is to close out the numbers from twelve to twenty, along with three doubles, triples,
