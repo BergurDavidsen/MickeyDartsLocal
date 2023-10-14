@@ -8,12 +8,6 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	const colorScore = {
-		0: 'red-500',
-		1: 'yellow-400',
-		2: 'yellow-400',
-		'Done!': 'green-400'
-	};
 	const roomPin = data.roomPin;
 	const gameID = data.gameID;
 	const finished = 'Done!';
@@ -35,6 +29,12 @@
 	let order = [];
 	let gone = [];
 	let wantsToRestart = false;
+	const colorScore = {
+		0: 'bg-red-500',
+		1: 'bg-yellow-400',
+		2: 'bg-yellow-400',
+		'Done!': 'bg-green-400'
+	};
 	const url =
 		'https://webhook.api.flowcore.io/event/bergurdavidsen/23439fd6-4219-4ea3-be35-1378f34fb680/create/push-data?key=bf6490d7-f36d-45b8-b87e-1d437bd210f1';
 
@@ -324,8 +324,7 @@
 				<td class="border border-white bg-black text-center text-white">{number}</td>
 
 				{#each Object.keys(scores) as key}
-					<td
-						class="border border-black bg-{colorScore[scores[key][number]]} text-center text-white"
+					<td class="border border-black {colorScore[scores[key][number]]} text-center text-white"
 						>{scores[key][number]}</td
 					>
 				{/each}
