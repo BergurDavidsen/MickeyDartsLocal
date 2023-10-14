@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import * as Ably from 'ably';
+	import { goto } from '$app/navigation';
 
 	export let form;
 	export let data;
@@ -44,13 +45,11 @@
 		pins.subscribe('new pin', (message) => {
 			validPins.add(message.data.pin);
 			pinToID[message.data.pin] = message.data.gameID;
-			console.log(pinToID);
 			numberOfRooms = validPins.size;
 		});
 		pins.publish('get rooms', {});
 		pins.subscribe('no players in room', (message) => {
 			validPins.splice(validPins.indexOf(message.data.pin, 1));
-			console.log(validPins);
 		});
 
 		return () => {
@@ -79,21 +78,21 @@
 	class="bg-black w-screen flex flex-col justify-center items-center text-white text-center mt-5"
 >
 	<h1
-		class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+		class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-green-500 md:text-5xl lg:text-6xl"
 	>
-		Welcome to Mickey Darts ✨Online✨ <i>(Beta)</i>
+		Mickey Darts ✨Online✨
 	</h1>
-	<p class="mt-3">
+	<p class="mt-3 text-yellow-500">
 		The rules are the same as always, but instead of using only one screen in pass and play mode,
 		you can now play the same game on multiple devices. The only thing you have to do is create a
 		room, and then share the pin with your friends, so they can join the fun 😊 <i
-			>(You play by the order of which you join the room)</i
+			>(You play by the order of which you join the game)</i
 		>
 	</p>
 	{#if form?.error}
 		<p class="text-red-500 mt-3">{form.message}!</p>
 	{/if}
-	<p class="mt-4 font-bold">Currently active rooms: {numberOfRooms}</p>
+	<p class="mt-4 font-bold text-red-700">Currently active rooms: {numberOfRooms}</p>
 </div>
 <div class="w-screen bg-black flex flex-col justify-center items-center text-white mt-10">
 	{#if joiningRoom}
@@ -160,6 +159,10 @@
 		<button
 			class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
 			on:click={() => handleJoin()}>Join Room</button
+		>
+		<button
+			class="my-4 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3.5 py-1.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+			on:click={() => goto('/')}>Back Home</button
 		>
 	{/if}
 </div>

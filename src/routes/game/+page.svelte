@@ -5,10 +5,14 @@
 
 	export let data;
 
-	// console.log(data.sessionID);
-
 	const sessioId = data.sessionID;
 
+	const colorScore = {
+		0: 'red-500',
+		1: 'yellow-400',
+		2: 'yellow-400',
+		'Done!': 'green-400'
+	};
 	let turnIndex = 0;
 	const finished = 'Done!';
 	let roundCounter = 1;
@@ -95,8 +99,7 @@
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 
-			console.log('data sent');
-			return response.json();
+			return response;
 		} catch (error) {
 			console.error('Error sending data:', error);
 			throw error; // Re-throw the error to propagate it further if needed
@@ -161,7 +164,6 @@
 				return;
 			}
 		}
-		console.log(`${player} is done`);
 		if (!winners.includes(player)) {
 			winners.push(player);
 		}
@@ -176,23 +178,25 @@
 
 {#if tableNumbers}
 	<div class="mx-2 flex flex-col justify-center items-center">
-		<table class="bg-white mt-2">
+		<table class="bg-white mt-2 text-center">
 			<tr>
-				<th class="border border-black">Targets</th>
+				<th class="border border-white text-white p-2 bg-black capitalize">Targets</th>
 				{#each Object.keys(players) as players}
-					<th class="border border-black"
+					<th class="border border-white bg-black text-white p-2 capitalize"
 						>{winners.includes(players) ? players + ' is done!' : players}
 					</th>
 				{/each}
 			</tr>
 			{#each tableNumbers as number}
 				<tr>
-					<td class="border border-black">{number}</td>
+					<td class="border border-white bg-black text-white capitalize">{number}</td>
 					{#each Object.keys(players) as player}
 						{#if number == 'score'}
-							<td class="border border-black">{players[player][number]}/36</td>
+							<td class="border border-white bg-black text-white">{players[player][number]}/36</td>
 						{:else}
-							<td class="border border-black">{players[player][number]}</td>
+							<td class="border border-black text-white bg-{colorScore[players[player][number]]}"
+								>{players[player][number]}</td
+							>
 						{/if}
 					{/each}
 				</tr>
@@ -205,7 +209,7 @@
 	<div class="flex flex-col justify-center items-center text-white my-2">
 		<p class="font-bold text-xl">Round {roundCounter}</p>
 		<div class="text-center justify-center items-center text-white my-4">
-			<p>Current player is {player.toUpperCase()}</p>
+			<p class="">It's {player}'s turn</p>
 			<button
 				class=" my-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 				on:click={() => passTurn()}

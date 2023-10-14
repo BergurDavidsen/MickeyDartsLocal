@@ -27,7 +27,6 @@
 			return b[1] - a[1];
 		})
 	);
-	console.log(sortedWinners);
 	function getRandomRGB() {
 		const r = Math.floor(Math.random() * 256); // Random value between 0 and 255 for red
 		const g = Math.floor(Math.random() * 256); // Random value between 0 and 255 for green
@@ -132,6 +131,11 @@
 	{:else}
 		<BubbleChart mydata={myData} myID={'allPlayers'} />
 	{/if}
+	<button
+		on:click={() => goto('/stats/previousgames')}
+		class="mb-7 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
+		>See all games</button
+	>
 	<h1 class="text-green-500 text-4xl font-bold mt-4">Leaderboards</h1>
 	{#if winners.length > 0}
 		<table class="table-auto w-full bg-white rounded-xl text-center my-4">
@@ -173,12 +177,6 @@
 		<h1 class="my-10 text-red-500 font-bold text-2xl">No winners Yet</h1>
 	{/if}
 	<div class="flex flex-col justify-center items-center">
-		<button
-			on:click={() => goto('/stats/previousgames')}
-			class="mb-7 text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800"
-			>See all games</button
-		>
-
 		<button
 			on:click={() => goto('/')}
 			class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
