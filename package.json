@@ -28,6 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/analytics": "^1.1.1",
 		"ably": "^1.2.43",
 		"chart.js": "^4.4.0",
 		"uuid": "^9.0.1",
