@@ -111,9 +111,9 @@
 					'validtime'
 				].split('T')[0]}
 			</h2>
-			<h2 class="font-bold text-xs text-blue-500">
+			<!-- <h2 class="font-bold text-xs text-blue-500">
 				{Object.keys(games)[index]}
-			</h2>
+			</h2> -->
 			<BubbleChart mydata={dataset} myID={Object.keys(games)[index]} />
 		{/each}
 	{/if}
