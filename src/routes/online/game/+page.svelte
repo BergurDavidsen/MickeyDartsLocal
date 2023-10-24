@@ -31,7 +31,7 @@
 	let wantsToRestart = false;
 	const colorScore = {
 		0: 'bg-red-500',
-		1: 'bg-yellow-400',
+		1: 'bg-orange-400',
 		2: 'bg-yellow-400',
 		'Done!': 'bg-green-400'
 	};
@@ -246,6 +246,27 @@
 		}
 	}
 
+	async function undoData(data) {
+		const response = await fetch('/api/undo', {
+			method: 'POST',
+			body: JSON.stringify({ data }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	}
+
+	async function deleteCurrentGame(gameID) {
+		const response = await fetch('/api/restart', {
+			method: 'POST',
+			body: JSON.stringify({ gameID }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		console.log(response);
+	}
+
 	function handleClick(key) {
 		if (!(currentPlayer == data.user || order[currentTurn] == data.user)) return;
 		if (hits[key] == finished) return;
@@ -284,6 +305,12 @@
 		}
 		window.localStorage.setItem('hits', JSON.stringify(hits));
 		channel.publish('update score', { score: hits, user: data.user });
+		let dataMessage = {
+			gameID: gameID,
+			player: data.user.toUpperCase(),
+			hit: key
+		};
+		undoData(dataMessage);
 	}
 
 	function passTurn() {
@@ -389,7 +416,10 @@
 	</button>
 	{#if wantsToRestart}
 		<button
-			on:click={() => channel.publish('restart game', {})}
+			on:click={() => {
+				channel.publish('restart game', {});
+				deleteCurrentGame(gameID);
+			}}
 			class="text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
 			>Confirm</button
 		>

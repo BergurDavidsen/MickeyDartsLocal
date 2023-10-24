@@ -105,6 +105,26 @@
 			throw error; // Re-throw the error to propagate it further if needed
 		}
 	}
+	async function undoData(data) {
+		const response = await fetch('/api/undo', {
+			method: 'POST',
+			body: JSON.stringify({ data }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	}
+	async function deleteCurrentGame(gameID) {
+		const response = await fetch('/api/restart', {
+			method: 'POST',
+			body: JSON.stringify({ gameID }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		console.log(response);
+	}
+
 	function handleClick(key) {
 		if (players[player][key] == finished) return;
 
@@ -143,6 +163,12 @@
 			players[player]['score'] -= 1;
 			window.localStorage.setItem('state', JSON.stringify(players));
 		}
+		let dataMessage = {
+			gameID: sessioId,
+			player: player.toUpperCase(),
+			hit: key
+		};
+		undoData(dataMessage);
 	}
 	function passTurn() {
 		turnIndex = (turnIndex + 1) % Object.keys(players).length;
@@ -169,6 +195,7 @@
 		}
 	}
 	function restartGame() {
+		deleteCurrentGame(sessioId);
 		if (browser) {
 			window.localStorage.clear();
 			window.location.reload();
