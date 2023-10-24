@@ -10,3 +10,11 @@ export async function load({ cookies, url}) {
     const sessionID = cookies.get("sessionID");
     return {sessionID};
 };
+
+// export const actions = {
+// 	undo: async ({request }) => {
+// 		const data = await request.formData();
+// 		const email = data.get('email');
+// 		const password = data.get('password');
+//     }
+// }

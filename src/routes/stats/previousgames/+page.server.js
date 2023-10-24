@@ -6,6 +6,9 @@ import {db} from "$lib/db.js";
 export async function load() {
     const gamesByGameID = {};
     
+    
+
+
     const everything = await db.mickey_real_data_v_4.findMany({
         orderBy:[
             {id:"desc"}

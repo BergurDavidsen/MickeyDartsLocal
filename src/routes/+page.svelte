@@ -21,6 +21,13 @@
 	}
 </script>
 
+<!-- 
+<button class="bg-blue-500" on:click={() => undo('BERGUR')}>Roll the dice</button>
+
+{#if number !== undefined}
+	<p class="text-white">there were {JSON.stringify(number)} elements deleted</p>
+{/if} -->
+
 <div
 	class="bg-black w-screen flex flex-col justify-center items-center text-white text-center mt-5"
 >
