@@ -10,7 +10,7 @@ export async function load({ cookies, url}) {
     }
     const roomPin = url.searchParams.get("room");
     const user = cookies.get("user");
-    const gameID = url.searchParams.get("sessionID");
+    const gameID = cookies.get("gameID");
 
     
 

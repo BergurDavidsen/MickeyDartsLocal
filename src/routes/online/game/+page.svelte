@@ -89,6 +89,7 @@
 		channel = ably.channels.get(roomPin);
 		pins = ably.channels.get('roomPins');
 		pins.publish('new pin', { pin: roomPin, gameID: gameID });
+
 		pins.subscribe('get rooms', (message) => {
 			pins.publish('new pin', { pin: roomPin, gameID: gameID });
 		});
@@ -264,7 +265,6 @@
 				'Content-Type': 'application/json'
 			}
 		});
-		console.log(response);
 	}
 
 	function handleClick(key) {
