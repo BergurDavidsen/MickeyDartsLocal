@@ -9,6 +9,22 @@
 	let hits = data.players;
 	const winners = data.winners;
 
+	const gameIDsPerPlayer = {};
+	const gameCountPerPlayer = {};
+
+	for (let player of hits) {
+		if (!Object.keys(gameIDsPerPlayer).includes(player['player'])) {
+			gameIDsPerPlayer[player['player']] = [];
+			gameIDsPerPlayer[player['player']].push(player['gameid']);
+		}
+		if (!gameIDsPerPlayer[player['player']].includes(player['gameid'])) {
+			gameIDsPerPlayer[player['player']].push(player['gameid']);
+		}
+	}
+	for (let player of Object.keys(gameIDsPerPlayer)) {
+		gameCountPerPlayer[player] = gameIDsPerPlayer[player].length;
+	}
+
 	let datasets = [];
 	let winCounts = {};
 	for (let winner of winners) {
@@ -163,6 +179,8 @@
 				<th class="p-3 border-r">Position</th>
 				<th class="p-3">Player</th>
 				<th class="p-3 border-l">Total Wins</th>
+				<th class="p-3 border-l">Games Played</th>
+				<th class="p-3 border-l">Win Rate</th>
 			</thead>
 			<tbody>
 				{#each Object.keys(sortedWinners) as winner, index}
@@ -170,6 +188,10 @@
 						<td class="p-4 border-r">{index + 1}</td>
 						<td class="p-4">{winner}</td>
 						<td class="p-4 border-l">{sortedWinners[winner]}</td>
+						<td class="p-4 border-l">{gameCountPerPlayer[winner]}</td>
+						<td class="p-4 border-l"
+							>{((sortedWinners[winner] * 100) / gameCountPerPlayer[winner]).toFixed(1)}%</td
+						>
 					</tr>
 				{/each}
 			</tbody>

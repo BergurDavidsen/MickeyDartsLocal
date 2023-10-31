@@ -122,7 +122,6 @@
 				'Content-Type': 'application/json'
 			}
 		});
-		console.log(response);
 	}
 
 	function handleClick(key) {

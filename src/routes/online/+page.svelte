@@ -13,6 +13,7 @@
 	let numberOfRooms = 0;
 	let pinToID = {};
 	const validPins = new Set();
+	let connections = {};
 
 	onMount(() => {
 		const ably = new Ably.Realtime.Promise({
@@ -42,15 +43,27 @@
 
 		pins = ably.channels.get('roomPins');
 
-		pins.subscribe('new pin', (message) => {
+		pins.subscribe('new pin', async (message) => {
 			validPins.add(message.data.pin);
 			pinToID[message.data.pin] = message.data.gameID;
 			numberOfRooms = validPins.size;
 		});
+
 		pins.publish('get rooms', {});
-		pins.subscribe('no players in room', (message) => {
-			validPins.splice(validPins.indexOf(message.data.pin, 1));
-		});
+
+		setInterval(async () => {
+			pins.publish('get rooms', {});
+			for (let pin of validPins) {
+				let channel = ably.channels.get(pin);
+				let presence = await channel.presence.get();
+				if (presence == 0) {
+					// console.log('NO PLAYERS IN ' + pinToID[pin]);
+					validPins.delete(pin);
+					delete pinToID[pin];
+					numberOfRooms = validPins.size;
+				}
+			}
+		}, 15 * 1000);
 
 		return () => {
 			pins.unsubscribe(pins);

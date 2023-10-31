@@ -26,9 +26,22 @@ export const actions = {
         if(cookies.get("user")){
             cookies.delete("user");
         }
-        cookies.set("user", user);
+        if(cookies.get("gameID")){
+            cookies.delete("gameID");
+        }
+        cookies.set("user", user, {
+            path: '/',
+            maxAge: 60 * 60 * 2,
+            httpOnly: false, // <-- if you want to read it in the browser
+        },);
+        cookies.set("gameID",gameID,{
+            path: '/',
+            maxAge: 60 * 60 * 2,
+            httpOnly: false, // <-- if you want to read it in the browser
+        });
 
-        throw redirect(303, `/online/game?room=${room}&sessionID=${gameID}`);
+
+        throw redirect(303, `/online/game?room=${room}`);
     },
 
     create: async({request,url, cookies}) => {
@@ -40,13 +53,23 @@ export const actions = {
         if(cookies.get("user")){
             cookies.delete("user");
         }
+        if(cookies.get("gameID")){
+            cookies.delete("gameID");
+        }
+
         cookies.set("user", user, {
             path: '/',
             maxAge: 60 * 60 * 2,
             httpOnly: false, // <-- if you want to read it in the browser
         },);
+        cookies.set("gameID",gameID,{
+            path: '/',
+            maxAge: 60 * 60 * 2,
+            httpOnly: false, // <-- if you want to read it in the browser
+        });
+
          
-        throw redirect(303, `/online/game?room=${room}&sessionID=${gameID}`);
+        throw redirect(303, `/online/game?room=${room}`);
     }
 
 }

@@ -12,7 +12,7 @@ export async function POST({request}) {
         }
     });
 
-    console.log(itemCandidates)
+    console.log("Deleted item: "+JSON.stringify(itemCandidates));
 
 
     return json(gameID);

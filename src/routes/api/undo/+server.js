@@ -26,7 +26,7 @@ export async function POST({request}) {
         
      });
 
-     console.log(itemCandidates);
+    
 
     const deletedItem = await db.mickey_real_data_v_4.delete({
         where:{
@@ -34,7 +34,7 @@ export async function POST({request}) {
         }
     })
       
-      console.log(`Deleted item: ${JSON.stringify(deletedItem)}`);
+    console.log(`Deleted item: ${JSON.stringify(deletedItem)}`);
     
 	return json(itemCandidates);
 }
