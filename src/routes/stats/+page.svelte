@@ -131,7 +131,7 @@
 	myData = { datasets: Object.values(datasets) }; // Convert the object to an array of datasets
 </script>
 
-<div class="flex flex-col justify-center items-center text-center my-3 bg-black">
+<div class="flex flex-col w-full justify-center items-center text-center my-3 bg-black">
 	<div class="border-2 border-red-500 rounded-xl bg-black mb-5">
 		<h1 class="text-green-500 my-3 font-bold text-4xl">Player Stats</h1>
 		<p class="text-yellow-500 my-3 font-medium mx-2 text-lg">
@@ -155,7 +155,7 @@
 	>
 	<h1 class="text-green-500 text-4xl font-bold mt-4">Leaderboards</h1>
 	{#if winners.length > 0}
-		<table class="table-auto w-full bg-white rounded-xl text-center my-4">
+		<table class="table-auto w-full mx-2 bg-white rounded-xl text-center my-4">
 			<caption class="text-yellow-500 mb-4 font-bold text-2xl">Fastest win</caption>
 			<thead>
 				<th class="p-3 border-r">Position</th>
@@ -179,7 +179,7 @@
 				<th class="p-3 border-r">Position</th>
 				<th class="p-3">Player</th>
 				<th class="p-3 border-l">Total Wins</th>
-				<th class="p-3 border-l">Games Played</th>
+
 				<th class="p-3 border-l">Win Rate</th>
 			</thead>
 			<tbody>
@@ -188,7 +188,6 @@
 						<td class="p-4 border-r">{index + 1}</td>
 						<td class="p-4">{winner}</td>
 						<td class="p-4 border-l">{sortedWinners[winner]}</td>
-						<td class="p-4 border-l">{gameCountPerPlayer[winner]}</td>
 						<td class="p-4 border-l"
 							>{((sortedWinners[winner] * 100) / gameCountPerPlayer[winner]).toFixed(1)}%</td
 						>
