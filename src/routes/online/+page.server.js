@@ -16,7 +16,7 @@ export const actions = {
     join: async({request, url, cookies}) => {
         const data = await request.formData();
         const room = data.get("room")
-        const user = data.get("user")
+        const user = data.get("user").trim();
         const gameID = data.get("gameID");
         
         if(!room){
@@ -47,7 +47,7 @@ export const actions = {
     create: async({request,url, cookies}) => {
         const data = await request.formData();
         const room = Math.round(Math.random()*(999999 - 100000))+100000;
-        const user = data.get("user");
+        const user = data.get("user").trim();
         const gameID = uuidv4();
 
         if(cookies.get("user")){
