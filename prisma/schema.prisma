@@ -83,3 +83,142 @@ model mickey_real_data_v_4 {
   player       String? @db.VarChar(255)
   validtime    String? @db.VarChar(255)
 }
+
+model mickey_adapter_test {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_new_test {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_new_test_2 {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_real_data_v_5 {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_real_v_6 {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model mickey_test_v_4 {
+  id           Int     @id @default(autoincrement())
+  currentround String? @db.VarChar(255)
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model new_table_working {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model nice_misplacement {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  latitude  String? @db.VarChar(255)
+  longitude String? @db.VarChar(255)
+  record    String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model reckless_tatami {
+  id        Int     @id @default(autoincrement())
+  eventid   String? @db.VarChar(255)
+  latitude  String? @db.VarChar(255)
+  longitude String? @db.VarChar(255)
+  record    String? @db.VarChar(255)
+  validtime String? @db.VarChar(255)
+}
+
+model ruddy_telephone {
+  id          Int     @id @default(autoincrement())
+  deviceid    String? @db.VarChar(255)
+  eventid     String? @db.VarChar(255)
+  humidity    String? @db.VarChar(255)
+  owner       String? @db.VarChar(255)
+  pressure    String? @db.VarChar(255)
+  temperature String? @db.VarChar(255)
+  validtime   String? @db.VarChar(255)
+}
+
+model spherical_angstrom {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model test_mickey_data {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
+
+model test_mickey_data_2 {
+  id           Int     @id @default(autoincrement())
+  currentround Int?
+  eventid      String? @db.VarChar(255)
+  gameid       String? @db.VarChar(255)
+  hit          String? @db.VarChar(255)
+  iswinner     String? @db.VarChar(255)
+  player       String? @db.VarChar(255)
+  validtime    String? @db.VarChar(255)
+}
