@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	const doNotDisplay = ['/online/game', '/game'];
 </script>
@@ -15,9 +16,9 @@
 				class="border-2 border-red-500 px-3 rounded-xl mx-2 hover:border-red-300 hover:bg-gray-600 hover:font-bold"
 				>Sign out</button
 			>
-		{:else}
+			<!-- {:else}
 			<p class="text-left">Not signed in.</p>
-			<button on:click={() => signIn('google')}>Sign in</button>
+			<button on:click={() => signIn('github')}>Sign in</button> -->
 		{/if}
 	{/if}
 </div>
