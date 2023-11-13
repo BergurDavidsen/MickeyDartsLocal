@@ -13,7 +13,7 @@ export async function POST({request}) {
     const hit = data["hit"];
    
 
-    const itemCandidates = await db.mickey_real_data_v_4.findFirst({
+    const itemCandidates = await db.mickey_real_v_6.findFirst({
         where:{
             gameid: gameID,
             player: player,
@@ -28,7 +28,7 @@ export async function POST({request}) {
 
     
 
-    const deletedItem = await db.mickey_real_data_v_4.delete({
+    const deletedItem = await db.mickey_real_v_6.delete({
         where:{
             id:itemCandidates['id']
         }

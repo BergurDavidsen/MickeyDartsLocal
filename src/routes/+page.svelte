@@ -9,6 +9,10 @@
 	let playerName = '';
 	let creatingRoom = false;
 
+	onMount(() => {
+		localStorage.clear();
+	});
+
 	function handleCreate() {
 		creatingRoom = true;
 		if (browser) {

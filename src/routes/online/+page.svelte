@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as Ably from 'ably';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let form;
 	export let data;
@@ -11,9 +12,11 @@
 	let joiningRoom = false;
 	let creatingRoom = false;
 	let numberOfRooms = 0;
+
 	let pinToID = {};
 	const validPins = new Set();
-	let connections = {};
+
+	let username = $page.data.session.user.name;
 
 	onMount(() => {
 		const ably = new Ably.Realtime.Promise({
@@ -115,11 +118,16 @@
 				method="POST"
 				class="flex flex-col justify-center items-center border p-5 rounded-xl shadow-2xl"
 			>
-				<p>Choose a username and enter room pin to join</p>
-				<label class="m-2" for="room">Username:</label>
-				<input class="m-2 p-2 border-black border rounded-md shadow-md" type="text" name="user" />
+				<p>Your Username Will Be:</p>
+				<p class="font-bold my-2">{username}</p>
+				<input
+					class="p-2 border-black border rounded-md shadow-md hidden"
+					type="text"
+					name="user"
+					bind:value={username}
+				/>
 
-				<label class="m-2" for="room">Room Pin:</label>
+				<label class="" for="room">Room Pin:</label>
 				<input type="text" value={pinToID[roomPin]} hidden name="gameID" />
 				<input
 					class="m-2 p-2 border-black border rounded-md shadow-md"
@@ -150,9 +158,14 @@
 				method="POST"
 				class="flex flex-col justify-center items-center border p-5 rounded-xl shadow-2xl"
 			>
-				<p>Choose a username</p>
-				<label class="m-2" for="room">Username:</label>
-				<input class="m-2 p-2 border-black border rounded-md shadow-md" type="text" name="user" />
+				<p>Your Username Will Be:</p>
+				<p class="font-bold my-2">{username}</p>
+				<input
+					class="m-2 p-2 border-black border rounded-md shadow-md hidden"
+					bind:value={username}
+					type="text"
+					name="user"
+				/>
 
 				<button
 					class="m-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
