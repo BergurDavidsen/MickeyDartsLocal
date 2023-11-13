@@ -11,12 +11,12 @@ export async function load({depends}) {
     
 
 
-    const everything = await db.mickey_real_data_v_4.findMany({
+    const everything = await db.mickey_real_v_6.findMany({
         orderBy:[
             {id:"desc"}
         ]
     });
-    const players = await db.mickey_real_data_v_4.findMany({
+    const players = await db.mickey_real_v_6.findMany({
         distinct:["player"],
         select:{
             player:true

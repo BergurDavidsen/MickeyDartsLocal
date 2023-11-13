@@ -283,7 +283,7 @@
 		channel.publish('update score', { score: hits, user: data.user });
 		let dataMessage = JSON.stringify({
 			gameID: gameID,
-			player: data.user.toUpperCase(),
+			player: data.user,
 			hit: key,
 			currentRound: roundCounter,
 			isWinner: isWinner
@@ -307,7 +307,7 @@
 		channel.publish('update score', { score: hits, user: data.user });
 		let dataMessage = {
 			gameID: gameID,
-			player: data.user.toUpperCase(),
+			player: data.user,
 			hit: key
 		};
 		undoData(dataMessage);
@@ -333,8 +333,8 @@
 	}
 </script>
 
-<h1 class="mt-2 text-green-400 font-bold capitalize">Room pin: {roomPin}</h1>
-<h1 class="mb-2 text-yellow-400 font-bold capitalize">Username: {data.user}</h1>
+<h1 class="mt-2 text-yellow-400 font-bold capitalize">Username: {data.user}</h1>
+<h1 class="mb-2 text-green-400 capitalize">Room pin: <strong>{roomPin}</strong></h1>
 
 <div class="flex flex-col justify-center items-center text-black">
 	<table class="rounded-md shadow-lg m-2">

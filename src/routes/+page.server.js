@@ -1,11 +1,9 @@
-
 import { redirect } from "@sveltejs/kit";
 import {fail} from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({cookies}) {
-    
-	return {}
+export async function load({cookies, url}) {
+
 }
 
 
