@@ -18,7 +18,7 @@
 	let wantsToRestart = false;
 	const colorScore = {
 		0: 'bg-red-500',
-		1: 'bg-yellow-400',
+		1: 'bg-orange-400',
 		2: 'bg-yellow-400',
 		'Done!': 'bg-green-400'
 	};
